@@ -26,8 +26,35 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO getProductById(Long id) {
-        return mapToDTO(productRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        return mapToDTO(getProduct(id));
+    }
+
+    @Override
+    public ProductDTO saveProduct(ProductDTO productDTO) {
+        Product product = mapToEntity(productDTO);
+        Product newProduct = productRepository.save(product);
+
+        return mapToDTO(newProduct);
+    }
+
+    @Override
+    public ProductDTO updateProduct(Long id, ProductDTO productDTO) {
+        Product product = getProduct(id);
+        product.setName(productDTO.getName());
+        product.setDescription(productDTO.getDescription());
+        product.setPrice(productDTO.getPrice());
+        product.setStock(productDTO.getStock());
+        product.setImage(productDTO.getImage());
+
+        Product updatedProduct = productRepository.save(product);
+
+        return mapToDTO(updatedProduct);
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        Product product = getProduct(id);
+        productRepository.delete(product);
     }
 
     private ProductDTO mapToDTO(Product product) {
@@ -51,5 +78,10 @@ public class ProductServiceImpl implements ProductService {
         product.setImage(productDTO.getImage());
 
         return product;
+    }
+
+    private Product getProduct(Long id) {
+        return productRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

@@ -1,10 +1,13 @@
 package cz.vosickamarketa.ita.eshopbackend.service.impl;
 
 import cz.vosickamarketa.ita.eshopbackend.domain.Product;
-import cz.vosickamarketa.ita.eshopbackend.model.ProductDTO;
+import cz.vosickamarketa.ita.eshopbackend.mapper.ProductMapper;
+import cz.vosickamarketa.ita.eshopbackend.model.CreateProductDto;
+import cz.vosickamarketa.ita.eshopbackend.model.ProductDto;
 import cz.vosickamarketa.ita.eshopbackend.repository.ProductRepository;
 import cz.vosickamarketa.ita.eshopbackend.service.ProductService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,72 +19,44 @@ import java.util.stream.Collectors;
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
     @Override
-    public List<ProductDTO> getAllProducts() {
+    public List<ProductDto> getAllProducts() {
         return productRepository.findAll().stream()
-                .map(this::mapToDTO)
+                .map(productMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ProductDTO getProductById(Long id) {
-        return mapToDTO(getProduct(id));
+    public ProductDto getProductById(Long id) {
+        return productRepository.findById(id)
+                .map(productMapper::toDto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @Override
-    public ProductDTO saveProduct(ProductDTO productDTO) {
-        Product product = mapToEntity(productDTO);
-        Product newProduct = productRepository.save(product);
+    public ProductDto saveProduct(CreateProductDto productDto) {
+        Product product = productMapper.toDomain(productDto);
 
-        return mapToDTO(newProduct);
+        productRepository.save(product);
+
+        return productMapper.toDto(product);
     }
 
     @Override
-    public ProductDTO updateProduct(Long id, ProductDTO productDTO) {
-        Product product = getProduct(id);
-        product.setName(productDTO.getName());
-        product.setDescription(productDTO.getDescription());
-        product.setPrice(productDTO.getPrice());
-        product.setStock(productDTO.getStock());
-        product.setImage(productDTO.getImage());
+    public ProductDto updateProduct(Long id, CreateProductDto productDto) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        Product updatedProduct = productRepository.save(product);
+        productMapper.mergeProduct(product, productDto);
+        productRepository.save(product);
 
-        return mapToDTO(updatedProduct);
+        return productMapper.toDto(product);
     }
 
     @Override
     public void deleteProduct(Long id) {
-        Product product = getProduct(id);
-        productRepository.delete(product);
-    }
-
-    private ProductDTO mapToDTO(Product product) {
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setId(product.getId());
-        productDTO.setName(product.getName());
-        productDTO.setDescription(product.getDescription());
-        productDTO.setPrice(product.getPrice());
-        productDTO.setStock(product.getStock());
-        productDTO.setImage(product.getImage());
-
-        return productDTO;
-    }
-
-    private Product mapToEntity(ProductDTO productDTO) {
-        Product product = new Product();
-        product.setName(productDTO.getName());
-        product.setDescription(productDTO.getDescription());
-        product.setPrice(productDTO.getPrice());
-        product.setStock(productDTO.getStock());
-        product.setImage(productDTO.getImage());
-
-        return product;
-    }
-
-    private Product getProduct(Long id) {
-        return productRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND));
+        productRepository.deleteById(id);
     }
 }

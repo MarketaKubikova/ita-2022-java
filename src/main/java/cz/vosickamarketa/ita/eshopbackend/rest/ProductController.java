@@ -1,6 +1,7 @@
-package cz.vosickamarketa.ita.eshopbackend.controller;
+package cz.vosickamarketa.ita.eshopbackend.rest;
 
-import cz.vosickamarketa.ita.eshopbackend.model.ProductDTO;
+import cz.vosickamarketa.ita.eshopbackend.model.CreateProductDto;
+import cz.vosickamarketa.ita.eshopbackend.model.ProductDto;
 import cz.vosickamarketa.ita.eshopbackend.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,27 +14,27 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/products")
 public class ProductController {
-    private final ProductService productService;
+    private ProductService productService;
 
     @GetMapping()
-    public List<ProductDTO> getAllProducts() {
+    public List<ProductDto> getAllProducts() {
         return productService.getAllProducts();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<ProductDto> getProductById(@PathVariable(name = "id") Long id) {
             return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> saveProduct(@RequestBody ProductDTO productDTO) {
-        return new ResponseEntity<>(productService.saveProduct(productDTO), HttpStatus.CREATED);
+    public ResponseEntity<ProductDto> saveProduct(@RequestBody CreateProductDto productDto) {
+        return new ResponseEntity<>(productService.saveProduct(productDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable(name = "id") Long id,
-                                                    @RequestBody ProductDTO productDTO) {
-        return new ResponseEntity<>(productService.updateProduct(id, productDTO), HttpStatus.OK);
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable(name = "id") Long id,
+                                                    @RequestBody CreateProductDto productDto) {
+        return new ResponseEntity<>(productService.updateProduct(id, productDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

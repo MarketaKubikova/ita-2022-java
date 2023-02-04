@@ -1,16 +1,13 @@
 package cz.vosickamarketa.ita.eshopbackend.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDTO {
-    private Long id;
+public class CreateProductDto {
     private String name;
     private String description;
     private Long price;

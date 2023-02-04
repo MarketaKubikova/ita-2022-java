@@ -9,9 +9,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
-@Entity
 @Getter
 @Setter
+@Entity
 public class Product {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)

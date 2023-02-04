@@ -1,13 +1,14 @@
 package cz.vosickamarketa.ita.eshopbackend.service;
 
-import cz.vosickamarketa.ita.eshopbackend.model.ProductDTO;
+import cz.vosickamarketa.ita.eshopbackend.model.CreateProductDto;
+import cz.vosickamarketa.ita.eshopbackend.model.ProductDto;
 
 import java.util.List;
 
 public interface ProductService {
-    List<ProductDTO> getAllProducts();
-    ProductDTO getProductById(Long id);
-    ProductDTO saveProduct(ProductDTO productDTO);
-    ProductDTO updateProduct(Long id, ProductDTO productDTO);
+    List<ProductDto> getAllProducts();
+    ProductDto getProductById(Long id);
+    ProductDto saveProduct(CreateProductDto productDto);
+    ProductDto updateProduct(Long id, CreateProductDto productDto);
     void deleteProduct(Long id);
 }

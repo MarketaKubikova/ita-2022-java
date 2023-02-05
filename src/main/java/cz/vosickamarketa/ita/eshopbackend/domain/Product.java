@@ -5,9 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
@@ -16,10 +18,15 @@ public class Product {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
+    @NotBlank
+    @Max(256)
     private String name;
-    @Length(max = 512)
+    @Max(512)
     private String description;
+    @PositiveOrZero
     private Long price;
+    @PositiveOrZero
     private Long stock;
+    @NotBlank
     private String image;
 }

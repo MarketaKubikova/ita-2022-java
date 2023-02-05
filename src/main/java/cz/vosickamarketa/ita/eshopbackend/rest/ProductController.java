@@ -3,6 +3,7 @@ package cz.vosickamarketa.ita.eshopbackend.rest;
 import cz.vosickamarketa.ita.eshopbackend.model.CreateProductDto;
 import cz.vosickamarketa.ita.eshopbackend.model.ProductDto;
 import cz.vosickamarketa.ita.eshopbackend.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/products")
 public class ProductController {
-    private ProductService productService;
+    private final ProductService productService;
 
     @GetMapping()
     public List<ProductDto> getAllProducts() {
@@ -27,13 +28,13 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDto> saveProduct(@RequestBody CreateProductDto productDto) {
+    public ResponseEntity<ProductDto> saveProduct(@Valid @RequestBody CreateProductDto productDto) {
         return new ResponseEntity<>(productService.saveProduct(productDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductDto> updateProduct(@PathVariable(name = "id") Long id,
-                                                    @RequestBody CreateProductDto productDto) {
+                                                    @Valid @RequestBody CreateProductDto productDto) {
         return new ResponseEntity<>(productService.updateProduct(id, productDto), HttpStatus.OK);
     }
 

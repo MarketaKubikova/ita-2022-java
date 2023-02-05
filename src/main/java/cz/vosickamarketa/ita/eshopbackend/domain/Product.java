@@ -24,9 +24,9 @@ public class Product {
     private String name;
     @Max(512)
     private String description;
-    @PositiveOrZero
-    private Long price;
     @Positive
+    private Long price;
+    @PositiveOrZero
     private Long stock;
     @NotBlank
     private String image;

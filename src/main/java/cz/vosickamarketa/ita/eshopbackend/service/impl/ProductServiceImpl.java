@@ -7,13 +7,11 @@ import cz.vosickamarketa.ita.eshopbackend.model.ProductDto;
 import cz.vosickamarketa.ita.eshopbackend.repository.ProductRepository;
 import cz.vosickamarketa.ita.eshopbackend.service.ProductService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -25,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> getAllProducts() {
         return productRepository.findAll().stream()
                 .map(productMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -57,6 +55,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
         productRepository.deleteById(id);
     }
 }

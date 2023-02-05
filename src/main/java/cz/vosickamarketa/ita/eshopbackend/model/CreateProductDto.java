@@ -2,6 +2,7 @@ package cz.vosickamarketa.ita.eshopbackend.model;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,7 @@ public class CreateProductDto {
     @NotBlank
     @Max(512)
     private String description;
-    @PositiveOrZero
+    @Positive
     private Long price;
     @PositiveOrZero
     private Long stock;

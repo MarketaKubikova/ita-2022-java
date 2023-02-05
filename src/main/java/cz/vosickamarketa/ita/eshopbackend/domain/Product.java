@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +26,7 @@ public class Product {
     private String description;
     @PositiveOrZero
     private Long price;
-    @PositiveOrZero
+    @Positive
     private Long stock;
     @NotBlank
     private String image;

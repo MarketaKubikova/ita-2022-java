@@ -1,11 +1,11 @@
 package cz.vosickamarketa.ita.eshopbackend.model;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
@@ -15,10 +15,10 @@ import lombok.experimental.Accessors;
 public class ProductDto {
     private Long id;
     @NotBlank
-    @Max(256)
+    @Length(max = 256)
     private String name;
     @NotBlank
-    @Max(512)
+    @Length(max = 512)
     private String description;
     @Positive
     private Long price;

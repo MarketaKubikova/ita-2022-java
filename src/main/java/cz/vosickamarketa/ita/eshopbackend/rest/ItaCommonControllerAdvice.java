@@ -62,7 +62,7 @@ public class ItaCommonControllerAdvice extends ResponseEntityExceptionHandler {
                 .map(error -> ((FieldError) error).getField() + " " + error.getDefaultMessage())
                 .collect(Collectors.joining(", "));
 
-        log.error("An exception has occurred. Argument cannot be blank or null");
+        log.error("An exception has occurred. Invalid argument.");
 
         return handleExceptionInternal(
                 ex,

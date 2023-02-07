@@ -1,16 +1,16 @@
 package cz.vosickamarketa.ita.eshopbackend.service.impl;
 
 import cz.vosickamarketa.ita.eshopbackend.domain.Product;
+import cz.vosickamarketa.ita.eshopbackend.exception.ProductNotFoundException;
 import cz.vosickamarketa.ita.eshopbackend.mapper.ProductMapper;
 import cz.vosickamarketa.ita.eshopbackend.model.CreateProductDto;
 import cz.vosickamarketa.ita.eshopbackend.model.ProductDto;
 import cz.vosickamarketa.ita.eshopbackend.repository.ProductRepository;
 import cz.vosickamarketa.ita.eshopbackend.service.ProductService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -34,7 +34,8 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto getProductById(Long id) {
         ProductDto productDto = productRepository.findById(id)
                 .map(productMapper::toDto)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ProductNotFoundException(id));
+
         log.info("Returning product with id %d.".formatted(id));
 
         return productDto;
@@ -53,7 +54,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto updateProduct(Long id, CreateProductDto productDto) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ProductNotFoundException(id));
 
         productMapper.mergeProduct(product, productDto);
         productRepository.save(product);
@@ -66,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(Long id) {
         if (!productRepository.existsById(id)) {
             log.debug("Product with id %d cannot be found.".formatted(id));
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new EntityNotFoundException();
         }
         log.info("Product with id %d has been deleted.".formatted(id));
         productRepository.deleteById(id);

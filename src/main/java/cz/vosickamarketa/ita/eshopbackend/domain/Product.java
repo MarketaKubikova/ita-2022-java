@@ -1,6 +1,7 @@
 package cz.vosickamarketa.ita.eshopbackend.domain;
 
 
+import cz.vosickamarketa.ita.eshopbackend.customvalidation.StartsWithUppercase;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,8 +18,9 @@ import org.hibernate.validator.constraints.Length;
 @Entity
 public class Product {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @StartsWithUppercase
     @NotBlank
     @Length(max = 256)
     private String name;

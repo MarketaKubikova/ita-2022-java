@@ -1,5 +1,6 @@
 package cz.vosickamarketa.ita.eshopbackend.model;
 
+import cz.vosickamarketa.ita.eshopbackend.customvalidation.StartsWithUppercase;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -12,6 +13,7 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateProductDto {
+    @StartsWithUppercase
     @NotBlank
     @Length(max = 256)
     private String name;
